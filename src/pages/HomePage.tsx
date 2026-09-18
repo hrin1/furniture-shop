@@ -3,8 +3,8 @@ import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
+import { Autoplay } from "swiper/modules";
 import "swiper/css";
 import heroBg from "@/assets/images/hero-bg.png";
 import woodTable01 from "@/assets/images/wood-table_01.png";
@@ -20,6 +20,10 @@ import categoryTable from "@/assets/images/card-img03.png";
 import categoryBed from "@/assets/images/card-img04.png";
 import categoryStorage from "@/assets/images/card-img05.png";
 import categoryLighting from "@/assets/images/card-img06.png";
+// TODO: 실제 목공방/장인 손길 이미지로 교체
+import craftImg01 from "@/assets/images/craft-01.png";
+import craftImg02 from "@/assets/images/craft-02.png";
+import craftImg03 from "@/assets/images/craft-03.png";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { AnimateIcon } from "@/components/animate-ui/icons/icon";
@@ -28,7 +32,6 @@ import { ArrowRight } from "@/components/animate-ui/icons/arrow-right";
 
 gsap.registerPlugin(SplitText, ScrollTrigger);
 
-// TODO: 실제 신상품 데이터 구조에 맞게 @/data/products 에서 가져오도록 교체
 const newArrivals = [
   {
     id: "wood-chair",
@@ -37,13 +40,7 @@ const newArrivals = [
     image: tactaChair,
     price: "78,000",
   },
-  {
-    id: "tray",
-    title: "Drop Tray",
-    description: "가벼운 라인의 트레이",
-    image: dropTray,
-    price: "32,000",
-  },
+  { id: "tray", title: "Drop Tray", description: "가벼운 라인의 트레이", image: dropTray, price: "32,000" },
   {
     id: "rabbit-chair",
     title: "Rabbit Chair",
@@ -51,74 +48,42 @@ const newArrivals = [
     image: rabbitChair,
     price: "55,000",
   },
-  {
-    id: "lamp",
-    title: "BIRD Lamp",
-    description: "협탁과 어울리는 작은 조명",
-    image: birdLamp,
-    price: "27,000",
-  },
+  { id: "lamp", title: "BIRD Lamp", description: "협탁과 어울리는 작은 조명", image: birdLamp, price: "27,000" },
 ];
 
-// TODO: 실제 categories 데이터(Product['category'] 기반)와 연결
 const categorySections = [
-  {
-    value: "sofa",
-    label: "SOFA",
-    description: "공간의 중심이 되는 소파 컬렉션",
-    image: categorySofa,
-  },
-  {
-    value: "chair",
-    label: "CHAIR",
-    description: "원목 결을 살린 시그니처 체어",
-    image: categoryChair,
-  },
-  {
-    value: "table",
-    label: "TABLE",
-    description: "다이닝과 일상을 잇는 테이블",
-    image: categoryTable,
-  },
-  {
-    value: "bed",
-    label: "BED",
-    description: "편안한 휴식을 위한 침실 가구",
-    image: categoryBed,
-  },
-  {
-    value: "storage",
-    label: "STORAGE",
-    description: "정돈된 일상을 위한 수납 가구",
-    image: categoryStorage,
-  },
-  {
-    value: "lighting",
-    label: "LIGHTING",
-    description: "공간의 분위기를 완성하는 조명",
-    image: categoryLighting,
-  },
+  { value: "sofa", label: "SOFA", description: "공간의 중심이 되는 소파 컬렉션", image: categorySofa },
+  { value: "chair", label: "CHAIR", description: "원목 결을 살린 시그니처 체어", image: categoryChair },
+  { value: "table", label: "TABLE", description: "다이닝과 일상을 잇는 테이블", image: categoryTable },
+  { value: "bed", label: "BED", description: "편안한 휴식을 위한 침실 가구", image: categoryBed },
+  { value: "storage", label: "STORAGE", description: "정돈된 일상을 위한 수납 가구", image: categoryStorage },
+  { value: "lighting", label: "LIGHTING", description: "공간의 분위기를 완성하는 조명", image: categoryLighting },
+] as const;
+
+const craftImages = [craftImg01, craftImg02, craftImg03];
+
+const craftStats = [
+  { label: "Since", value: "15+", desc: "매년 원목의 결을 연구하며\n기술을 다듬어온 시간" },
+  { label: "Material", value: "100%", desc: "합성 자재 없이\n오직 원목만 사용합니다" },
+  { label: "Craftsmanship", value: "500+", desc: "장인의 손끝에서\n완성된 가구들" },
 ] as const;
 
 function CategoryCard({ item }: { item: (typeof categorySections)[number] }) {
   return (
     <Link
       to={`/products?category=${item.value}`}
-      className="group relative flex h-[260px] bg-[#f5f5f5] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
+      className="group relative flex h-[300px] bg-[#f5f5f5] overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-neutral-900"
     >
-      {/* 텍스트 영역 */}
       <div className="relative z-10 flex flex-col justify-center gap-3 w-[55%] p-8 f-mont">
         <h3 className="text-2xl font-semibold tracking-tight text-neutral-900 uppercase">{item.label}</h3>
         <p className="text-sm text-neutral-500 leading-relaxed">{item.description}</p>
         <MoreViewLabel label="Explore category" />
       </div>
-
-      {/* 이미지 영역: 카드 우측을 가장자리까지 꽉 채움 */}
       <div className="absolute right-0 top-0 w-[50%] h-full overflow-hidden flex justify-end items-end">
         <img
           src={item.image}
           alt={item.label}
-          className="h-full object-contain transition-transform duration-500 group-hover:scale-105"
+          className="h-full object-contain transition-transform duration-500 group-hover:scale-[1.02] translate-y-4"
         />
       </div>
     </Link>
@@ -141,7 +106,8 @@ export default function HomePage() {
   const sliderWrapperRef = useRef<HTMLDivElement>(null);
   const swiperRef = useRef<SwiperType | null>(null);
 
-  // 폰트 로드 후 ScrollTrigger 위치 재계산 (텍스트 폭 변화로 트리거 지점이 어긋나는 것 방지)
+  const craftImageRefs = useRef<(HTMLDivElement | null)[]>([]);
+
   useEffect(() => {
     document.fonts.ready.then(() => {
       ScrollTrigger.refresh();
@@ -157,37 +123,13 @@ export default function HomePage() {
 
     const tl = gsap.timeline();
 
-    tl.from(split1.chars, {
-      yPercent: 110,
-      rotate: 4,
-      opacity: 0,
-      duration: 0.7,
-      ease: "expo.out",
-      stagger: 0.025,
-    })
+    tl.from(split1.chars, { yPercent: 110, rotate: 4, opacity: 0, duration: 0.7, ease: "expo.out", stagger: 0.025 })
       .from(
         split2.chars,
-        {
-          yPercent: 110,
-          rotate: 4,
-          opacity: 0,
-          duration: 0.7,
-          ease: "expo.out",
-          stagger: 0.025,
-        },
+        { yPercent: 110, rotate: 4, opacity: 0, duration: 0.7, ease: "expo.out", stagger: 0.025 },
         "-=0.5",
       )
-      .from(
-        splitSub.chars,
-        {
-          yPercent: 110,
-          opacity: 0,
-          duration: 0.5,
-          ease: "expo.out",
-          stagger: 0.015,
-        },
-        "-=0.4",
-      );
+      .from(splitSub.chars, { yPercent: 110, opacity: 0, duration: 0.5, ease: "expo.out", stagger: 0.015 }, "-=0.4");
 
     return () => {
       split1.revert();
@@ -197,16 +139,57 @@ export default function HomePage() {
     };
   }, []);
 
-  // 두 번째 섹션 : 스크롤 진입 시 이미지 클립 리빌
+  // Craft 섹션 : 이미지는 고정, 아래쪽부터 클립이 걷히며 뒤 이미지가 드러남 (자동, 스크롤 무관)
+  useEffect(() => {
+    const images = craftImageRefs.current.filter(Boolean) as HTMLDivElement[];
+    const total = images.length;
+    if (total < 2) return;
+
+    let current = 0;
+
+    // 순서(current 기준 거리)에 따라 z-index를 재계산 — 매 사이클마다 새로 계산해서 꼬임 방지
+    const applyZIndex = () => {
+      images.forEach((img, idx) => {
+        if (idx === current) {
+          gsap.set(img, { zIndex: total + 1 });
+        } else {
+          const rank = (idx - current - 1 + total) % total; // 0 = 바로 다음 순서
+          gsap.set(img, { zIndex: total - rank });
+        }
+      });
+    };
+
+    // 초기 상태: 모두 보이는 상태로 두고 스택 순서 배치
+    images.forEach((img) => gsap.set(img, { clipPath: "inset(0% 0 0% 0)" }));
+    applyZIndex();
+
+    const interval = setInterval(() => {
+      const currentImg = images[current];
+
+      // 아래쪽부터 잘려나가며 사라져(밑→위) 뒤 이미지를 드러냄
+      gsap.to(currentImg, {
+        clipPath: "inset(0% 0 100% 0)",
+        duration: 1.2,
+        ease: "power2.inOut",
+        onComplete: () => {
+          // 다 사라지면 다시 보이는 상태로 복구 (다음 자기 차례 대비)
+          gsap.set(currentImg, { clipPath: "inset(0% 0 0% 0)" });
+          // 애니메이션이 끝난 뒤에만 순서를 넘기고 z-index 재배치 (여기서 하는 게 핵심)
+          current = (current + 1) % total;
+          applyZIndex();
+        },
+      });
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     if (!productSectionRef.current) return;
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: productSectionRef.current,
-          start: "top 60%",
-        },
+        scrollTrigger: { trigger: productSectionRef.current, start: "top 60%" },
       });
 
       tl.fromTo(
@@ -235,7 +218,6 @@ export default function HomePage() {
     return () => ctx.revert();
   }, []);
 
-  // 세 번째 섹션 : "BEST ITEMS" 스플릿 텍스트 + 우측 슬라이더 스르륵 등장
   useEffect(() => {
     if (!newHeadingRef.current || !sliderWrapperRef.current) return;
 
@@ -243,10 +225,7 @@ export default function HomePage() {
 
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: newArrivalsSectionRef.current,
-          start: "top 75%",
-        },
+        scrollTrigger: { trigger: newArrivalsSectionRef.current, start: "top 75%" },
       });
 
       tl.from(split.chars, {
@@ -256,16 +235,7 @@ export default function HomePage() {
         duration: 0.7,
         ease: "expo.out",
         stagger: 0.03,
-      }).from(
-        sliderWrapperRef.current,
-        {
-          xPercent: 8,
-          opacity: 0,
-          duration: 1,
-          ease: "power3.out",
-        },
-        "-=0.4",
-      );
+      }).from(sliderWrapperRef.current, { xPercent: 8, opacity: 0, duration: 1, ease: "power3.out" }, "-=0.4");
     }, newArrivalsSectionRef);
 
     return () => {
@@ -295,7 +265,47 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 프로젝트/시그니처 제품 소개 섹션 */}
+      {/* Craft 섹션 : 좌 - 고정된 이미지, 아래에서 위로 클립이 걷히며 자동 전환 / 우 - 지표 3개 */}
+      <section className="w-full bg-white px-6 md:px-16 py-20 md:py-28">
+        <p className="text-xs tracking-[0.2em] uppercase text-neutral-400 mb-10 md:mb-14 f-mont">
+          Since 2011 — Our Craft
+        </p>
+
+        <div className="flex justify-between">
+          <div className="relative w-90 h-[420px] md:h-[560px] overflow-hidden">
+            {craftImages.map((img, idx) => (
+              <div
+                key={idx}
+                ref={(el) => {
+                  craftImageRefs.current[idx] = el;
+                }}
+                className="absolute inset-0"
+              >
+                <img src={img} alt="원목을 다듬는 장인의 손길" className="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+
+          <div className="w-[50%] flex flex-col justify-center gap-12 md:gap-16">
+            <p className="text-sm md:text-base text-neutral-500 leading-relaxed">
+              원목이 가진 결의 아름다움을 그대로 담아내는 것, 그것이 15년간 집중해온 단 하나의 방향입니다. <br/>합성 자재
+              없이 오직 원목만을 사용해 만든 가구는 시간이 지날수록 더 깊어지는 색과 결을 갖습니다. <br/>빠르게 소비되는
+              가구가 아닌, 오래 두고 쓸수록 애착이 쌓이는 물건을 만듭니다.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 md:gap-10">
+              {craftStats.map((stat) => (
+                <div key={stat.label} className="f-mont">
+                  <p className="text-xs uppercase tracking-[0.1em] text-neutral-400 mb-3">{stat.label}</p>
+                  <p className="text-4xl md:text-5xl font-bold text-neutral-900">{stat.value}</p>
+                  <p className="mt-3 text-xs text-neutral-500 leading-relaxed whitespace-pre-line">{stat.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section ref={productSectionRef} className="w-full h-screen border-t border-neutral-200 border-b">
         <div className="h-full grid grid-cols-4 grid-rows-[1fr_1.2fr_1fr]">
           <div className="col-start-1 row-start-1 p-8 border-r border-b border-neutral-200" />
@@ -351,7 +361,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 신상품 슬라이드 섹션 : 좌 - Best Items / 우 - 슬라이더 */}
       <section
         ref={newArrivalsSectionRef}
         className="w-full pt-32 pb-24 mt-6 md:pt-40 md:pb-0 md:h-screen overflow-hidden flex flex-col md:flex-row items-start"
@@ -397,7 +406,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 우측 슬라이더 */}
         <div className="flex-1 min-w-0" ref={sliderWrapperRef}>
           <Swiper
             modules={[Autoplay]}
@@ -410,10 +418,7 @@ export default function HomePage() {
             observer
             observeParents
             speed={2000}
-            autoplay={{
-              delay: 5000,
-              disableOnInteraction: false,
-            }}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
             breakpoints={{
               768: { slidesPerView: 2.1, spaceBetween: 24 },
               1280: { slidesPerView: 2.6, spaceBetween: 32 },
@@ -440,7 +445,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 카테고리 바로가기 섹션 */}
       <section className="w-full p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {categorySections.map((item) => (
