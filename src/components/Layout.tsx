@@ -1,15 +1,26 @@
-import { Outlet } from "react-router-dom";
+import { useLocation, useOutlet } from "react-router-dom";
+import { AnimatePresence } from "motion/react";
+import PageTransition from "@/components/PageTransition";
 import Header from "./Header";
 import Footer from "./Footer";
 
 export default function Layout() {
+  const location = useLocation();
+  const outlet = useOutlet();
+
   return (
-    <div className="isolate min-h-screen flex flex-col bg-white">
+    <>
       <Header />
-      <main className="flex-1">
-        <Outlet />
-      </main>
+
+      <AnimatePresence
+        mode="wait"
+        initial={false}
+        onExitComplete={() => window.scrollTo({ top: 0, behavior: "instant" })}
+      >
+        <PageTransition key={location.pathname + location.search}>{outlet}</PageTransition>
+      </AnimatePresence>
+
       <Footer />
-    </div>
-  )
+    </>
+  );
 }

@@ -287,3 +287,8 @@ export const categories: { value: Product['category']; label: string }[] = [
   { value: 'storage', label: 'STORAGE' },
   { value: 'lighting', label: 'LIGHTING' },
 ]
+
+export const menuItems = [
+  ...categories.map((c) => ({ label: c.label, to: `/products?category=${c.value}` })),
+  { label: 'LOOKBOOK', to: '/lookbook' },
+]

@@ -70,7 +70,7 @@ export default function SearchOverlay({ isOpen, onClose, excludeRef }: SearchOve
     <div
       ref={overlayRef}
       style={{ height }}
-      className="absolute top-17 left-0 w-full bg-white border-b shadow-lg z-50 overflow-hidden transition-[height] duration-300 ease-in-out"
+      className="absolute top-full left-0 w-full bg-white border-b shadow-lg z-50 overflow-hidden transition-[height] duration-300 ease-in-out"
     >
       <div ref={contentRef} className="max-w-3xl mx-auto px-6 py-4">
         <div className="flex items-center gap-3">

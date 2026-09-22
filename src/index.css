@@ -23,6 +23,11 @@ body {
   margin: 0;
 }
 
+html,
+body {
+  background-color: #fff;
+}
+
 .f-mont {
   font-family: "Montserrat", sans-serif;
 }
