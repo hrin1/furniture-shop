@@ -4,6 +4,7 @@ export interface Product {
   price: number
   category: ProductCategory
   imageUrl: string
+  images?: string[]
   description: string
   colors?: string[]
   material?: string

@@ -10,6 +10,7 @@ import { UserRound } from "./animate-ui/icons/user-round";
 import SearchOverlay from "./SearchOverlay";
 import { Heart } from "./animate-ui/icons/heart";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { useCart } from "@/contexts/CartContext";
 
 // 컴포넌트 밖으로 이동: 안에 두면 리렌더(헤더 호버 등)마다 새 컴포넌트로 인식되어
 // 글자 DOM이 통째로 재생성되고 flip 애니메이션이 끊김
@@ -39,6 +40,7 @@ export default function Header() {
   const [searchOpen, setSearchOpen] = useState(false);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const { count: wishlistCount } = useWishlist();
+  const { totalCount: cartCount } = useCart();
 
   // 헤더 호버 또는 검색창이 열려 있으면 흰 배경 + 어두운 글자
   const isSolid = headerHover || searchOpen;
@@ -167,12 +169,21 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <button
+            <Link
+              to="/cart"
               onMouseEnter={handleCartHover}
-              className="flex items-center p-2 text-inherit hover:opacity-70 cursor-pointer rounded-sm transition-opacity"
+              className="relative flex items-center p-2 text-inherit hover:opacity-70 cursor-pointer rounded-sm transition-opacity"
             >
               <CartIcon key={cartAnimKey} animate={cartAnimate} className="w-4.5 h-4.5 text-inherit" />
-            </button>
+              {cartCount > 0 && (
+                <span
+                  style={{ mixBlendMode: "normal", isolation: "isolate" }}
+                  className="absolute -top-0.5 -right-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#FF3F3F] px-1 text-[10px] font-semibold leading-none text-white f-mont"
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
+                </span>
+              )}
+            </Link>
           </li>
         </ul>
       </div>

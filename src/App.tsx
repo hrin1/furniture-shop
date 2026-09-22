@@ -9,6 +9,7 @@ import WishlistPage from "@/pages/WishlistPage";
 import { useLenis } from "@/hooks/useLenis";
 import { WishlistProvider } from "@/contexts/WishlistContext";
 import { RecentlyViewedProvider } from "@/contexts/RecentlyViewedContext";
+import { CartProvider } from "@/contexts/CartContext";
 import RecentlyViewedWidget from "@/components/RecentlyViewedWidget";
 
 function App() {
@@ -17,22 +18,24 @@ function App() {
 
   return (
     <WishlistProvider>
-      <RecentlyViewedProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="products" element={<ProductListPage />} />
-              <Route path="products/:id" element={<ProductDetailPage />} />
-              <Route path="wishlist" element={<WishlistPage />} />
-              <Route path="cart" element={<CartPage />} />
-              <Route path="/lookbook" element={<LookbookPage />} />
-            </Route>
-          </Routes>
+      <CartProvider>
+        <RecentlyViewedProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route index element={<HomePage />} />
+                <Route path="products" element={<ProductListPage />} />
+                <Route path="products/:id" element={<ProductDetailPage />} />
+                <Route path="wishlist" element={<WishlistPage />} />
+                <Route path="cart" element={<CartPage />} />
+                <Route path="/lookbook" element={<LookbookPage />} />
+              </Route>
+            </Routes>
 
-          <RecentlyViewedWidget />
-        </BrowserRouter>
-      </RecentlyViewedProvider>
+            <RecentlyViewedWidget />
+          </BrowserRouter>
+        </RecentlyViewedProvider>
+      </CartProvider>
     </WishlistProvider>
   );
 }
