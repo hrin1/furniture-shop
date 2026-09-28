@@ -50,6 +50,11 @@ export default function ProductDetailPage() {
   const needsColorSelection = hasColors && !selectedColor;
   const images = product.images && product.images.length > 0 ? product.images : [product.imageUrl];
 
+  const THUMB_SLOTS = 4;
+
+  // 이미지 개수와 상관없이 항상 4칸. 없는 칸은 undefined
+  const thumbSlots: (string | undefined)[] = Array.from({ length: THUMB_SLOTS }, (_, i) => images[i]);
+
   const handleAddToCart = () => {
     if (!product.inStock || needsColorSelection) return;
     addToCart(product, quantity, selectedColor);
@@ -78,9 +83,9 @@ export default function ProductDetailPage() {
 
       <div className="mt-8 grid grid-cols-1 gap-10 md:mt-12 md:grid-cols-2 md:gap-16">
         {/* 이미지 */}
-        <div className="flex flex-col gap-3 md:flex-row">
-          {/* 메인 이미지 */}
-          <div className="relative order-1 aspect-square flex-1 overflow-hidden bg-neutral-100 md:order-2">
+        <div className="flex flex-col gap-3 md:flex-row md:gap-4 [--thumb:7.5rem] lg:[--thumb:8rem]">
+          {/* 메인 이미지: md 이상에서 썸네일 4칸 합계 높이에 맞춤 */}
+          <div className="relative order-1 aspect-square overflow-hidden bg-neutral-100 md:order-2 md:aspect-auto md:h-[calc(4*var(--thumb)+3*0.75rem)] md:flex-1">
             <img src={images[activeImage]} alt={product.name} className="h-full w-full object-cover" />
             {!product.inStock && (
               <span className="pointer-events-none absolute right-0 top-4 bg-neutral-900 px-3 py-1 text-[10px] tracking-[0.16em] text-white f-mont">
@@ -89,32 +94,37 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          {/* 썸네일 리스트 */}
-          {images.length > 1 && (
-            <ul
-              aria-label="상품 이미지 목록"
-              className="order-2 flex gap-3 overflow-x-auto md:order-1 md:w-20 md:flex-col md:overflow-visible"
-            >
-              {images.map((img, i) => {
-                const isActive = activeImage === i;
-                return (
-                  <li key={img + i} className="shrink-0">
+          {/* 썸네일: 정사각형 4칸 */}
+          <ul
+            aria-label="상품 이미지 목록"
+            className="order-2 flex gap-3 overflow-x-auto md:order-1 md:flex-col md:overflow-visible"
+          >
+            {thumbSlots.map((img, i) => {
+              const isActive = activeImage === i;
+              return (
+                <li key={i} className="shrink-0">
+                  {img ? (
                     <button
                       type="button"
                       onClick={() => setActiveImage(i)}
                       aria-label={`${product.name} 이미지 ${i + 1}`}
                       aria-pressed={isActive}
-                      className={`h-16 w-16 cursor-pointer overflow-hidden border-2 transition-colors md:h-20 md:w-20 ${
+                      className={`aspect-square h-16 w-16 cursor-pointer overflow-hidden border-2 transition-colors md:h-[var(--thumb)] md:w-[var(--thumb)] ${
                         isActive ? "border-neutral-900" : "border-transparent hover:border-neutral-300"
                       }`}
                     >
                       <img src={img} alt="" className="h-full w-full object-cover" />
                     </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                  ) : (
+                    <div
+                      aria-hidden
+                      className="aspect-square h-16 w-16 border-2 border-transparent bg-neutral-100 md:h-[var(--thumb)] md:w-[var(--thumb)]"
+                    />
+                  )}
+                </li>
+              );
+            })}
+          </ul>
         </div>
 
         {/* 정보 */}
